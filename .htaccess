@@ -1,0 +1,24 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /registroEventos/
+
+    # Remover index.php de la URL
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L]
+
+    # Evitar acceso a carpetas del sistema
+    RewriteRule ^(application|system|tests|user_guide)/ - [F,L]
+
+    # Evitar acceso a archivos .htaccess y otros ocultos
+    RewriteRule (^\.|/\.) - [F]
+
+    # Redirigir la raíz al controlador por defecto
+    RewriteCond %{REQUEST_URI} ^/$
+    RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    # Si mod_rewrite no está disponible, mostrar un error 404
+    ErrorDocument 404 /index.php
+</IfModule>
